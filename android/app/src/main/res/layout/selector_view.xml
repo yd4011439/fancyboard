@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_height="56dp">
+    <Button
+        android:id="@+id/alphabet_select"
+        style="@style/KeyStyle"
+        android:text="𝙰"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/symbol_select"
+        style="@style/KeyStyle"
+        android:text="ღ" />
+
+    <Button
+        android:id="@+id/face_select"
+        android:textSize="14sp"
+        style="@style/KeyStyle"
+        android:text="(ツ)" />
+
+    <Button
+        android:id="@+id/emoji_select"
+        style="@style/KeyStyle"
+        android:text="😇" />
+
+    <Button
+        android:id="@+id/art_select"
+        style="@style/KeyStyle"
+        android:text="░" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
+
+    <ImageButton
+        android:id="@+id/change_theme"
+        android:layout_weight="1"
+        style="@style/KeyStyle"
+        android:src="@drawable/round_brush_24"/>
+
+    <ImageButton
+        android:id="@+id/backspace"
+        android:visibility="gone"
+        android:layout_weight="1.5"
+        style="@style/KeyStyle"
+        android:src="@drawable/round_backspace_24"/>
+</LinearLayout>

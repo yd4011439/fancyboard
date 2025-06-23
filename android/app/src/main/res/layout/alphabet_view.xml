@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:id="@+id/keyboard_lowercase"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:paddingBottom="4dp">
+
+        <FrameLayout
+            android:id="@+id/font_select"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"/>
+
+        <!-- Row 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <Button
+                android:id="@+id/key_q"
+                style="@style/KeyStyle"
+                android:text="q" />
+
+            <Button
+                android:id="@+id/key_w"
+                style="@style/KeyStyle"
+                android:text="w" />
+
+            <ImageButton
+                android:id="@+id/zero_non_joining"
+                style="@style/KeyStyle"
+                android:src="@drawable/zero_width_non_joining"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/key_e"
+                style="@style/KeyStyle"
+                android:text="e" />
+
+            <Button
+                android:id="@+id/key_r"
+                style="@style/KeyStyle"
+                android:text="r" />
+
+            <Button
+                android:id="@+id/key_t"
+                style="@style/KeyStyle"
+                android:text="t" />
+
+            <Button
+                android:id="@+id/key_y"
+                style="@style/KeyStyle"
+                android:text="y" />
+
+            <Button
+                android:id="@+id/key_u"
+                style="@style/KeyStyle"
+                android:text="u" />
+
+            <Button
+                android:id="@+id/key_i"
+                style="@style/KeyStyle"
+                android:text="i" />
+
+            <Button
+                android:id="@+id/key_o"
+                style="@style/KeyStyle"
+                android:text="o" />
+
+            <ImageButton
+                android:id="@+id/zero_joining"
+                style="@style/KeyStyle"
+                android:src="@drawable/zero_width_joining"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/key_p"
+                style="@style/KeyStyle"
+                android:text="p" />
+
+            <Button
+                android:id="@+id/row_2_e"
+                style="@style/KeyStyle"
+                android:text="p"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Row 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <View
+                android:id="@+id/row_3_gap_s"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.5" />
+
+            <Button
+                android:id="@+id/key_a"
+                style="@style/KeyStyle"
+                android:text="a" />
+
+            <Button
+                android:id="@+id/key_s"
+                style="@style/KeyStyle"
+                android:text="s" />
+
+            <Button
+                android:id="@+id/key_d"
+                style="@style/KeyStyle"
+                android:text="d" />
+
+            <Button
+                android:id="@+id/key_f"
+                style="@style/KeyStyle"
+                android:text="f" />
+
+            <Button
+                android:id="@+id/key_g"
+                style="@style/KeyStyle"
+                android:text="g" />
+
+            <Button
+                android:id="@+id/key_h"
+                style="@style/KeyStyle"
+                android:text="h" />
+
+            <Button
+                android:id="@+id/key_j"
+                style="@style/KeyStyle"
+                android:text="j" />
+
+            <Button
+                android:id="@+id/key_k"
+                style="@style/KeyStyle"
+                android:text="k" />
+
+            <Button
+                android:id="@+id/key_l"
+                style="@style/KeyStyle"
+                android:text="l" />
+
+            <View
+                android:id="@+id/row_3_gap_e"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <!-- Row 4 -->
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <ImageButton
+                android:id="@+id/key_shift"
+                style="@style/KeyStyle"
+                android:layout_weight="1.25"
+                android:src="@drawable/keyboard_shift_outline" />
+
+            <Button
+                android:id="@+id/key_z"
+                style="@style/KeyStyle"
+                android:text="z" />
+
+            <Button
+                android:id="@+id/key_x"
+                style="@style/KeyStyle"
+                android:text="x" />
+
+            <Button
+                android:id="@+id/key_c"
+                style="@style/KeyStyle"
+                android:text="c" />
+
+            <Button
+                android:id="@+id/key_v"
+                style="@style/KeyStyle"
+                android:text="v" />
+
+            <Button
+                android:id="@+id/key_b"
+                style="@style/KeyStyle"
+                android:text="b" />
+
+            <Button
+                android:id="@+id/key_n"
+                style="@style/KeyStyle"
+                android:text="n" />
+
+            <Button
+                android:id="@+id/key_m"
+                style="@style/KeyStyle"
+                android:text="m" />
+
+            <Button
+                android:id="@+id/row_4_e1"
+                style="@style/KeyStyle"
+                android:text="a"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/row_4_e2"
+                style="@style/KeyStyle"
+                android:text="a"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/key_delete"
+                style="@style/KeyStyle"
+                android:layout_weight="1.25"
+                android:src="@drawable/round_backspace_24" />
+        </LinearLayout>
+
+        <!-- Row 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <Button
+                android:id="@+id/key_symbol"
+                style="@style/KeyStyle"
+                android:layout_weight="1.5"
+                android:text="123?"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/key_internationalize"
+                style="@style/KeyStyle"
+                android:layout_weight="1"
+                android:src="@drawable/globe" />
+
+            <ImageButton
+                android:id="@+id/key_space"
+                style="@style/KeyStyle"
+                android:layout_weight="4"
+                android:src="@drawable/round_space_bar_24" />
+
+            <Button
+                android:id="@+id/key_dot"
+                style="@style/KeyStyle"
+                android:text="." />
+
+            <ImageButton
+                android:id="@+id/key_enter"
+                style="@style/KeyStyle"
+                android:layout_weight="1.5"
+                android:src="@drawable/baseline_keyboard_return_24" />
+        </LinearLayout>
+    </LinearLayout>
+</merge>
