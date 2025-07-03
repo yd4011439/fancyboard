@@ -1,6 +1,8 @@
 package fancyboard.fonts.keyboard.ui.component
 
 import android.net.Uri
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,7 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import androidx.compose.ui.viewinterop.AndroidView
+import com.bumptech.glide.Glide
 
 @Composable
 fun ImagePicker(
@@ -53,15 +56,23 @@ fun ImagePicker(
                 .padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AsyncImage(
-                model = uri,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            AndroidView(
                 modifier = Modifier
                     .width(24.dp)
                     .height(24.dp)
                     .background(MaterialTheme.colorScheme.surface)
                     .clip(RoundedCornerShape(32.dp)),
+                factory = {
+                    ImageView(it).apply {
+                        layoutParams = FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                        )
+                    }
+                },
+                update = {
+                    Glide.with(it).load(uri).into(it)
+                }
             )
 
             Text(

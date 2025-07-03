@@ -121,6 +121,7 @@ class EmojiView(
 
     override fun applyTheme(theme: KeyboardTheme) {
         super.applyTheme(theme)
+        catSelect.applyTheme(theme)
     }
 
     companion object {

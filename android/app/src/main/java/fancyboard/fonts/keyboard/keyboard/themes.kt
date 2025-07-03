@@ -26,6 +26,7 @@ data class KeyboardTheme(
     val textSize: Int = 18,
     val enableVibration: Boolean? = null,
     val enableSound: Boolean? = null,
+    val suggestionTextColor: Int? = null,
 )
 
 val lightKeyboardTheme = KeyboardTheme(
@@ -35,6 +36,7 @@ val lightKeyboardTheme = KeyboardTheme(
     keyColor = Color.parseColor("#FFFFFF"),
     keyPressedColor = Color.parseColor("#DDDDDD"),
     textColor = Color.parseColor("#212121"),
+    suggestionTextColor = Color.parseColor("#212121"),
 )
 
 val darkKeyboardTheme = KeyboardTheme(
@@ -43,6 +45,7 @@ val darkKeyboardTheme = KeyboardTheme(
     keyColor = Color.argb(255, 40, 40, 40),
     keyPressedColor = Color.argb(255, 70, 70, 70),
     textColor = Color.WHITE,
+    suggestionTextColor = Color.WHITE,
 )
 
 val clearKeyLight = KeyboardTheme(
@@ -52,6 +55,7 @@ val clearKeyLight = KeyboardTheme(
     keyColor = Color.parseColor("#00000000"),
     keyPressedColor = Color.parseColor("#FFDDDDDD"),
     textColor = Color.BLACK,
+    suggestionTextColor = Color.BLACK,
 )
 
 val clearKeyDark = KeyboardTheme(
@@ -61,6 +65,7 @@ val clearKeyDark = KeyboardTheme(
     keyColor = Color.parseColor("#00000000"),
     keyPressedColor = Color.parseColor("#8FDDDDDD"),
     textColor = Color.WHITE,
+    suggestionTextColor = Color.WHITE
 )
 
 val laliGuras = KeyboardTheme(
@@ -70,6 +75,7 @@ val laliGuras = KeyboardTheme(
     keyColor = Color.parseColor("#8f000000"),
     keyPressedColor = Color.parseColor("#FFAA0000"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val tiger = KeyboardTheme(
@@ -79,6 +85,7 @@ val tiger = KeyboardTheme(
     keyColor = Color.parseColor("#8f000000"),
     keyPressedColor = Color.parseColor("#FF00AA00"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val himalaya = KeyboardTheme(
@@ -88,7 +95,7 @@ val himalaya = KeyboardTheme(
     keyColor = Color.parseColor("#8F003300"),
     keyPressedColor = Color.parseColor("#FFAA0000"),
     textColor = Color.parseColor("#DDDDDD"),
-    textSize = 18,
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val tropics = KeyboardTheme(
@@ -98,7 +105,7 @@ val tropics = KeyboardTheme(
     keyColor = Color.parseColor("#8F003300"),
     keyPressedColor = Color.parseColor("#8F0000AA"),
     textColor = Color.parseColor("#DDDDDD"),
-    textSize = 18,
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val love = KeyboardTheme(
@@ -108,6 +115,7 @@ val love = KeyboardTheme(
     keyColor = Color.parseColor("#8f9f1239"),
     keyPressedColor = Color.parseColor("#FF9f1239"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val love2 = KeyboardTheme(
@@ -117,6 +125,7 @@ val love2 = KeyboardTheme(
     keyColor = Color.parseColor("#8f86198f"),
     keyPressedColor = Color.parseColor("#FF86198f"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val love3 = KeyboardTheme(
@@ -126,6 +135,7 @@ val love3 = KeyboardTheme(
     keyColor = Color.parseColor("#8f3f6212"),
     keyPressedColor = Color.parseColor("#FF3f6212"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val love4 = KeyboardTheme(
@@ -135,6 +145,8 @@ val love4 = KeyboardTheme(
     keyColor = Color.parseColor("#8f000000"),
     keyPressedColor = Color.parseColor("#FFAA0000"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
+
 )
 
 val glitch = KeyboardTheme(
@@ -144,6 +156,7 @@ val glitch = KeyboardTheme(
     keyColor = Color.argb(180, 0, 0, 70),
     keyPressedColor = Color.argb(200, 0, 0, 100),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 
@@ -154,6 +167,7 @@ val rust = KeyboardTheme(
     keyColor = Color.argb(200, 40, 0, 0),
     keyPressedColor = Color.argb(200, 60, 0, 0),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
 
 val technology = KeyboardTheme(
@@ -163,8 +177,8 @@ val technology = KeyboardTheme(
     keyColor = Color.parseColor("#8f000000"),
     keyPressedColor = Color.parseColor("#AF444444"),
     textColor = Color.parseColor("#DDDDDD"),
+    suggestionTextColor = Color.parseColor("#DDDDDD")
 )
-
 
 val themes = mutableMapOf(
     "Minimal" to arrayOf(
@@ -195,7 +209,7 @@ fun getDefaultTheme(context: Context): KeyboardTheme {
 fun setDefaultTheme(context: Context, theme: KeyboardTheme?) {
     val prefs = getPreference(context)
     val json = gson.toJson(theme)
-    prefs.edit(commit = true) {putString("defaultTheme", json)}
+    prefs.edit(commit = true) { putString("defaultTheme", json) }
 
     val intent = Intent(KeyboardService.ACTION_KEYBOARD_BROADCAST).apply {
         putExtra("type", "theme_change")
@@ -205,7 +219,7 @@ fun setDefaultTheme(context: Context, theme: KeyboardTheme?) {
 
 private fun saveUserThemes(context: Context, themes: Array<KeyboardTheme>) {
     val prefs = getPreference(context)
-    prefs.edit { putString("userThemes", gson.toJson(themes))}
+    prefs.edit { putString("userThemes", gson.toJson(themes)) }
 }
 
 fun getUserThemes(context: Context): Array<KeyboardTheme> {
@@ -215,14 +229,14 @@ fun getUserThemes(context: Context): Array<KeyboardTheme> {
     return userThemes
 }
 
-fun deleteBackgroundImage(context: Context, settings: KeyboardTheme){
-    if(settings.backgroundImage!=null && settings.backgroundImage.startsWith("images")){
+fun deleteBackgroundImage(context: Context, settings: KeyboardTheme) {
+    if (settings.backgroundImage != null && settings.backgroundImage.startsWith("images")) {
         File(context.filesDir, settings.backgroundImage).delete()
     }
 }
 
 fun deleteTheme(context: Context, theme: KeyboardTheme) {
-    if(getDefaultTheme(context).id==theme.id){
+    if (getDefaultTheme(context).id == theme.id) {
         setDefaultTheme(context, null)
     }
 

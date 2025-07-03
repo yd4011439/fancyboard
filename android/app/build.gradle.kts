@@ -13,8 +13,8 @@ android {
         applicationId = "fancyboard.fonts.keyboard"
         minSdk = 23
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,8 +43,7 @@ android {
 dependencies {
     implementation("com.google.android.gms:play-services-ads:24.4.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.2.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     val nav_version = "2.9.0"
     implementation("androidx.navigation:navigation-compose:$nav_version")

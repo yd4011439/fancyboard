@@ -63,9 +63,12 @@ class KeyboardService : InputMethodService() {
     private val keyboardReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == ACTION_KEYBOARD_BROADCAST) {
-                val message = intent.getStringExtra("type")
-                if (message == "theme_change" && context != null) {
+                val type = intent.getStringExtra("type")
+                if (type == "theme_change" && context != null) {
                     keyboardView?.applyTheme(getDefaultTheme(context))
+                }else if(type == "font_unlocked"){
+                    val fontName = intent.getStringExtra("font")
+                    keyboardView?.onFontUnlocked(fontName)
                 }
             }
         }
@@ -102,10 +105,30 @@ class KeyboardService : InputMethodService() {
         val inputClass = inputType and InputType.TYPE_MASK_CLASS
         val isNumber = inputClass == InputType.TYPE_CLASS_NUMBER || inputClass == InputType.TYPE_CLASS_PHONE
 
-        keyboardView?.setNumeric(isNumber)
+        keyboardView?.onStartInputView(isNumber)
 
         val action = info.imeOptions and EditorInfo.IME_MASK_ACTION
         val keyboardEnter = keyboardView?.findViewById<ImageButton>(R.id.key_enter)
         setEnterIcon(keyboardEnter, action)
+    }
+
+    override fun onUpdateSelection(
+        oldSelStart: Int, oldSelEnd: Int, newSelStart: Int, newSelEnd: Int,
+        candidatesStart: Int, candidatesEnd: Int
+    ) {
+        super.onUpdateSelection(
+            oldSelStart,
+            oldSelEnd,
+            newSelStart,
+            newSelEnd,
+            candidatesStart,
+            candidatesEnd
+        )
+
+        val ic = currentInputConnection ?: return
+        val surroundingCharSequence = ic.getTextBeforeCursor(100, 0) ?: return
+        val surroundingText = surroundingCharSequence.toString()
+        val prefix = surroundingText.takeLastWhile { it != '\n' && it != '\t' && it != ' ' }
+        keyboardView?.onSuggestion(prefix)
     }
 }

@@ -5,20 +5,26 @@ import android.widget.FrameLayout
 
 import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import coil3.load
+import com.bumptech.glide.Glide
+import fancyboard.fonts.keyboard.AdViewActivity
 import fancyboard.fonts.keyboard.R
 import fancyboard.fonts.keyboard.data.allSymbolCategories
 import fancyboard.fonts.keyboard.data.textArtCategories
 import fancyboard.fonts.keyboard.data.textFaceCategories
+import fancyboard.fonts.keyboard.rateApp
 import java.io.File
+
 
 @SuppressLint("ViewConstructor")
 open class KeyboardView(
@@ -30,9 +36,10 @@ open class KeyboardView(
     private var preferences = context.getSharedPreferences(context.packageName, MODE_PRIVATE)
 
     private var currentLayout = preferences.getString("defaultFont", "Normal") ?: "Normal"
-    private var textFaceCategory = preferences.getString("defaultTextFace", textFaceCategories[0]) ?: textFaceCategories[0]
+    private var textFaceCategory =
+        preferences.getString("defaultTextFace", textFaceCategories[0]) ?: textFaceCategories[0]
     private val backgroundImage: ImageView = ImageView(context)
-    private val selectorView = SelectorView(context, theme)
+    val selectorView = SelectorView(context, theme)
 
     private val mainContainer = FrameLayout(context)
     private val alphabetView = AlphabetView(context, theme, currentLayout)
@@ -43,7 +50,7 @@ open class KeyboardView(
     private val textArtView = TextArtView(context, theme, textArtCategories[0])
 
     private val adContainer = AdContainer(context, !disableTouch)
-    private var lastBackgroundImage:String? = null
+    private var lastBackgroundImage: String? = null
 
     private val keyPreviewView = inflate(context, R.layout.popup_key_preview, null) as TextView
 
@@ -59,8 +66,10 @@ open class KeyboardView(
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, context.dpToPx(heightDp))
             orientation = LinearLayout.VERTICAL
             addView(adContainer)
+
             addView(selectorView)
-            mainContainer.addView(alphabetView)
+            mainContainer.addView(if (isNumeric) numpadView else alphabetView)
+            if (isNumeric) selectorView.visibility = GONE
             addView(mainContainer)
         }
 
@@ -71,24 +80,31 @@ open class KeyboardView(
         addView(keyPreviewView)
 
         alphabetView.onLayoutChange = {
-            preferences.edit { putString("defaultFont", it) }
-            currentLayout = it
+            if (hasUnlockedFont(context, it)) {
+                preferences.edit { putString("defaultFont", it) }
+                currentLayout = it
+                if (currentLayout != "Normal") {
+                    selectorView.resetSuggestion()
+                }
+            } else {
+                showUnlockFontOverlay(it)
+            }
         }
 
         selectorView.onChange = {
-            if(it == R.id.alphabet_select){
+            if (it == R.id.alphabet_select) {
                 mainContainer.removeAllViews()
                 mainContainer.addView(alphabetView)
-            }else if(it==R.id.face_select){
+            } else if (it == R.id.face_select) {
                 mainContainer.removeAllViews()
                 mainContainer.addView(textFaceView)
-            }else if(it==R.id.symbol_select){
+            } else if (it == R.id.symbol_select) {
                 mainContainer.removeAllViews()
                 mainContainer.addView(symbolView)
-            }else if(it==R.id.emoji_select){
+            } else if (it == R.id.emoji_select) {
                 mainContainer.removeAllViews()
                 mainContainer.addView(emojiView)
-            }else if(it==R.id.art_select){
+            } else if (it == R.id.art_select) {
                 mainContainer.removeAllViews()
                 mainContainer.addView(textArtView)
             }
@@ -123,19 +139,20 @@ open class KeyboardView(
         backgroundImage.alpha = 1f
         if (theme.backgroundImage != null) {
             // Don't do unnecessary image loading
-            if(theme.backgroundImage != lastBackgroundImage){
-                val src = if(theme.backgroundImage.startsWith("images")){
+            if (theme.backgroundImage != lastBackgroundImage) {
+                val src = if (theme.backgroundImage.startsWith("images")) {
                     File(context.filesDir, theme.backgroundImage).toUri()
-                }else{
+                } else {
                     theme.backgroundImage
                 }
 
-                backgroundImage.load(src)
+                Glide.with(backgroundImage).load(src).into(backgroundImage)
+
                 lastBackgroundImage = theme.backgroundImage
             }
         } else if (theme.backgroundDrawable != null) {
             backgroundImage.setBackgroundResource(theme.backgroundDrawable)
-        }else{
+        } else {
             backgroundImage.alpha = 0f
         }
 
@@ -151,12 +168,145 @@ open class KeyboardView(
         keyPreviewView.setTextColor(theme.textColor)
     }
 
-    fun setNumeric(isNumeric: Boolean){
-        this.isNumeric = true
+    fun onStartInputView(isNumeric: Boolean) {
+        show24HrUnlockOverlay()
+
+        if (this.isNumeric && isNumeric) return
+        if (!this.isNumeric && isNumeric) {
+            mainContainer.removeAllViews()
+            mainContainer.addView(numpadView)
+            selectorView.visibility = INVISIBLE
+        } else {
+            selectorView.visibility = VISIBLE
+            mainContainer.removeAllViews()
+            mainContainer.addView(alphabetView)
+        }
+
         applyTheme(this.theme)
+    }
+
+    fun onFontUnlocked(name: String?) {
+        if (name != null) {
+            currentLayout = name
+            preferences.edit { putString("defaultFont", name) }
+            alphabetView.setLayout(name)
+        }
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return disableTouch
+    }
+
+    fun onSuggestion(prefix: String) {
+        if (mainContainer.getChildAt(0) == alphabetView) {
+            if (currentLayout == "Normal") {
+                selectorView.onSuggestion(prefix)
+            }
+        }
+    }
+
+    fun show24HrUnlockOverlay() {
+        if (shouldShowUnlockAd(context)) {
+            showOverlay("Unlock Fancyboard for next 24 hr by watching a short Ad", "Watch Ad", {
+                // Open activity that has the loading overlay and interstitial ad stuff
+                val intent = Intent(context, AdViewActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
+                context.startActivity(intent)
+
+                // Remove this overlay after 5 seconds
+                postDelayed({
+                    removeView(it)
+                }, 5000)
+            }, "Cancel", {
+                removeView(it)
+            })
+        } else {
+            showRateUsOverlay()
+        }
+    }
+
+    fun showRateUsOverlay() {
+        var lastRateUsAt = preferences.getLong("lastRateUsAt", -1)
+        if (lastRateUsAt == -1L) {
+            preferences.edit { putLong("lastRateUsAt", System.currentTimeMillis()) }
+            return
+        }
+
+        // Ask at least once two days
+        if (System.currentTimeMillis() - lastRateUsAt > 2 * 86_400 * 1000) {
+            preferences.edit { putLong("lastRateUsAt", System.currentTimeMillis()) }
+            showOverlay("Please provide feedback by rating us.", "Rate Us", {
+                rateApp(context)
+            }, "Cancel", {
+                hideOverlay(it)
+            })
+        }
+    }
+
+    fun showUnlockFontOverlay(name: String) {
+        showOverlay("Unlock $name font by watching an Ad which can be 10-60s long", "Unlock", {
+            val intent = Intent(context, AdViewActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+            intent.putExtra("font", name)
+            context.startActivity(intent)
+
+            postDelayed({
+                alphabetView.setLayout(currentLayout)
+                hideOverlay(it)
+            }, 5000)
+        }, "Not Now", {
+            alphabetView.setLayout(currentLayout)
+            hideOverlay(it)
+        })
+    }
+
+    fun hideOverlay(overlay: View) {
+        overlay.animate().y(context.dpToPx(adContainer.adHeightDp + 308).toFloat())
+            .setDuration(100)
+            .withEndAction { removeView(overlay) }.start()
+    }
+
+    fun showOverlay(
+        message: String,
+        positive: String,
+        onPositive: (v: View) -> Unit,
+        cancel: String = "Cancel",
+        onNegative: ((v: View) -> Unit)? = null
+    ) {
+        val overlay = inflate(context, R.layout.keyboard_overlay, null)
+        overlay.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, context.dpToPx(308))
+        overlay.y = context.dpToPx(adContainer.adHeightDp + 308).toFloat()
+        val finalY = context.dpToPx(adContainer.adHeightDp).toFloat()
+
+        overlay.setOnClickListener {  }
+
+        overlay.animate().y(finalY).setDuration(100).start()
+
+        val messageView = overlay.findViewById<TextView>(R.id.message)
+        val positiveView = overlay.findViewById<Button>(R.id.positive_action)
+        val cancelView = overlay.findViewById<Button>(R.id.cancel_action)
+
+        if (onNegative == null) {
+            cancelView.visibility = GONE
+        }
+
+        messageView.text = message
+        positiveView.text = positive
+        cancelView.text = cancel
+
+        positiveView.setOnClickListener {
+            onPositive(overlay)
+        }
+
+        cancelView.setOnClickListener {
+            onNegative?.invoke(overlay)
+        }
+        addView(overlay)
     }
 }

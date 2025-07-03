@@ -2,8 +2,6 @@ package fancyboard.fonts.keyboard.keyboard
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -33,8 +31,10 @@ class AlphabetView(
     val shiftKey: ImageButton
     val symbolChangeKey: Button
     var onLayoutChange: ((layout:String)->Unit)? = null
-    private val fontSelect = HorizontalSelectView(context, theme, layout, fontNames)
-
+    private val fontSelect = HorizontalSelectView(context, theme, layout, fontNames){
+        if(!hasUnlockedFont(context, it)) return@HorizontalSelectView "👑 $it"
+        return@HorizontalSelectView it
+    }
 
     init {
         inflate(context, R.layout.alphabet_view, this)
@@ -74,8 +74,7 @@ class AlphabetView(
                     val label = (it as Button).text.toString()
 
                     if (this.layout == "uʍop ǝpᴉsdn") {
-                        currentInputConnection?.commitText(label, 1)
-                        moveCursorLeft()
+                        currentInputConnection?.commitText(label, 0)
                     } else {
                         currentInputConnection?.commitText(label, 1)
                     }
@@ -92,8 +91,7 @@ class AlphabetView(
             theme,
             {
                 if (this.layout == "uʍop ǝpᴉsdn") {
-                    currentInputConnection?.commitText(" ", 1)
-                    moveCursorLeft()
+                    currentInputConnection?.commitText(" ", 0)
                 } else {
                     currentInputConnection?.commitText(" ", 1)
                 }
@@ -138,6 +136,7 @@ class AlphabetView(
 
     fun setLayout(layout: String) {
         this.layout = layout
+        fontSelect.setItem(layout)
         applyTheme(this.theme)
     }
 

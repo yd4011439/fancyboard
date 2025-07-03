@@ -3,25 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:gravity="center_vertical"
-    android:padding="8dp"
-    android:layout_height="340dp">
-
-    <LinearLayout
-        android:gravity="end"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageButton
-            android:id="@+id/settings"
-            android:tint="@color/black"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="Settings"
-            android:background="@android:color/transparent"
-            android:src="@drawable/round_settings_24"
-            android:layout_width="48dp"
-            android:layout_height="48dp"/>
-    </LinearLayout>
-
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,43 +11,43 @@
         android:orientation="horizontal">
         <Button
             style="@style/KeyStyle"
-            android:text="१" />
+            android:text="1" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="२" />
+            android:text="2" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="३" />
+            android:text="3" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="४" />
+            android:text="4" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="५" />
+            android:text="5" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="६" />
+            android:text="6" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="७" />
+            android:text="7" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="८" />
+            android:text="8" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="९" />
+            android:text="9" />
 
         <Button
             style="@style/KeyStyle"
-            android:text="०" />
+            android:text="0" />
     </LinearLayout>
 
     <LinearLayout
@@ -91,7 +73,7 @@
             android:text="3"/>
 
         <ImageButton
-            android:id="@+id/key_delete"
+            android:id="@+id/backspace"
             style="@style/KeyStyle"
             android:src="@drawable/round_backspace_24" />
     </LinearLayout>

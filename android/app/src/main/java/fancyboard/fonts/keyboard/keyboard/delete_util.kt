@@ -13,9 +13,9 @@ fun deleteLastUnicodeChar(inputConnection: InputConnection?) {
 
     // 1. Handle upside down character deletion (Unicode-safe)
     if (!textAfterCursor.isNullOrEmpty()) {
-        // Skip the characters which are spaces new line or other
+        // Skip the characters which are spaces new line or other leave the last character :)
         var pos = 0
-        while(pos<textAfterCursor.length && textAfterCursor[pos].isWhitespace()){
+        while (pos < textAfterCursor.length-1 && textAfterCursor[pos].isWhitespace()) {
             pos++;
         }
 

@@ -18,7 +18,8 @@ class HorizontalSelectView(
     context: Context,
     private var theme: KeyboardTheme,
     private var selectedItem: String,
-    private var displayItems: Array<String>
+    private var displayItems: Array<String>,
+    private var displayFunc: (str: String) -> String = { it }
 ) : RecyclerView(context) {
     private inner class FontSelectAdapter : Adapter<ViewHolder>() {
         override fun onCreateViewHolder(
@@ -39,7 +40,7 @@ class HorizontalSelectView(
             val px = context.dpToPx(8)
             val py = context.dpToPx(4)
             button.setPadding(px, py, px, py)
-            button.text = displayItems[position]
+            button.text = displayFunc(displayItems[position])
 
             if(displayItems[position] == selectedItem) {
                 button.backgroundTintList = ColorStateList.valueOf(theme.keyPressedColor)
@@ -96,6 +97,11 @@ class HorizontalSelectView(
         adapter?.notifyItemChanged(index)
         adapter?.notifyItemChanged(prevIndex)
         layoutManager?.smoothScrollToPosition(this, null, index)
+    }
+
+    fun setItem(item:String){
+        val index = displayItems.indexOf(item)
+        setSelectedIndex(index)
     }
 
     @SuppressLint("NotifyDataSetChanged")

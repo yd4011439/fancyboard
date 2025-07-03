@@ -71,7 +71,7 @@ open class BaseKeyView(context: Context, var theme: KeyboardTheme) : FrameLayout
 
     fun moveCursorLeft() {
         val beforeCursor =
-            currentInputConnection?.getTextBeforeCursor(1000, 0) // Get enough text to be safe
+            currentInputConnection?.getTextBeforeCursor(2, 0)
         val currentCursorPosition = beforeCursor?.length ?: 0
 
         if (currentCursorPosition > 0) {

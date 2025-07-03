@@ -1,6 +1,7 @@
 package fancyboard.fonts.keyboard.ui.component
 
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -200,6 +201,14 @@ fun CreateTheme(
                         modifier = Modifier.padding(top = 8.dp),
                     ) {
                         settings = settings.copy(textColor = it)
+                    }
+
+                    ButtonColorPicker(
+                        title = "Suggestion Text Color",
+                        value = settings.suggestionTextColor ?: Color.BLACK,
+                        modifier = Modifier.padding(top = 8.dp),
+                    ) {
+                        settings = settings.copy(suggestionTextColor = it)
                     }
                 }
             }

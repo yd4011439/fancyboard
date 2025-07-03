@@ -47,7 +47,6 @@ fun View.onTouchAction(
             }
 
             MotionEvent.ACTION_UP -> {
-                Log.d("onTouchAction", "Up")
 
                 if (moved){
                     return@setOnTouchListener false
@@ -66,14 +65,12 @@ fun View.onTouchAction(
             }
 
             MotionEvent.ACTION_CANCEL -> {
-                Log.d("onTouchAction", "Cancel")
                 view.isPressed = false
                 view.backgroundTintList = prevTintList
                 true
             }
 
             MotionEvent.ACTION_MOVE -> {
-                Log.d("onTouchAction", "Move")
 
                 view.backgroundTintList = prevTintList
                 moved = onDown == null && abs(event.x - startX) > 10

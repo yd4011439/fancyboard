@@ -1,9 +1,6 @@
 package fancyboard.fonts.keyboard.data
 
-import android.util.Log
 import fancyboard.fonts.keyboard.R
-
-val numpadLayout = mapOf<Int, String>()
 
 val englishNormal = mapOf(
     R.id.key_q to "q",

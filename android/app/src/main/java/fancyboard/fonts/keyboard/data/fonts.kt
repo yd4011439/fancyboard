@@ -1,5 +1,10 @@
 package fancyboard.fonts.keyboard.data
 
+import android.util.Log
+import kotlin.collections.contains
+import kotlin.collections.set
+import kotlin.math.min
+
 val typeWriter =
     "𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿𝟶"
 val outline =
@@ -88,14 +93,6 @@ val vapourWaveLayout = arrayOf(
     "１", "２", "３", "４", "５", "６", "７", "８", "９", "０"
 )
 
-val mirroredLayout = arrayOf(
-    "ɒ", "d", "ɔ", "b", "ɘ", "ʇ", "ϱ", "⑁", "i", "ᒑ", "ʞ", "l", "m", "n", "o", "q", "p",
-    "ɿ", "ƨ", "ɟ", "u", "v", "w", "x", "γ", "z",
-    "A", "ᗺ", "Ɔ", "ᗡ", "Ǝ", "ꟻ", "ວ", "H", "I", "ᒐ", "ꓘ", "⅃", "M", "И", "O", "ᑫ", "Ϙ",
-    "Я", "Ƨ", "T", "U", "V", "W", "X", "Y", "Z",
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
-)
-
 val sansSerifLayout = arrayOf(
     "𝖺", "𝖻", "𝖼", "𝖽", "𝖾", "𝖿", "𝗀", "𝗁", "𝗂", "𝗃", "𝗄", "𝗅", "𝗆",
     "𝗇", "𝗈", "𝗉", "𝗊", "𝗋", "𝗌", "𝗍", "𝗎", "𝗏", "𝗐", "𝗑", "𝗒", "𝗓",
@@ -117,7 +114,7 @@ val sansSerifBoldLayout = arrayOf(
     "𝗻", "𝗼", "𝗽", "𝗾", "𝗿", "𝘀", "𝘁", "𝘂", "𝘃", "𝘄", "𝘅", "𝘆", "𝘇",
     "𝗔", "𝗕", "𝗖", "𝗗", "𝗘", "𝗙", "𝗚", "𝗛", "𝗜", "𝗝", "𝗞", "𝗟", "𝗠",
     "𝗡", "𝗢", "𝗣", "𝗤", "𝗥", "𝗦", "𝗧", "𝗨", "𝗫", "𝗪", "𝗫", "𝗬", "𝗭",
-    "𝟭", "𝟮", "𝟯", "𝟰", "𝟱", "𝟲", "𝟳", "8",  "𝟵", "𝟬"
+    "𝟭", "𝟮", "𝟯", "𝟰", "𝟱", "𝟲", "𝟳", "8", "𝟵", "𝟬"
 )
 
 val sansSerifBoldItalicLayout = arrayOf(
@@ -140,7 +137,7 @@ val serifBoldItalicLayout = arrayOf(
     "𝒂", "𝒃", "𝒄", "𝒅", "𝒆", "𝒇", "𝒈", "𝒉", "𝒊", "𝒋", "𝒌", "𝒍", "𝒎",
     "𝒏", "𝒐", "𝒑", "𝒒", "𝒓", "𝒔", "𝒕", "𝒖", "𝒗", "𝒘", "𝒙", "𝒚", "𝒛",
     "𝑨", "𝑩", "𝑪", "𝑫", "𝑬", "𝑭", "𝑮", "𝑯", "𝑰", "𝑱", "𝑲", "𝑳", "𝑴",
-    "𝑵", "𝑶", "𝑷", "𝑸", "𝑹", "𝑺", "𝑻", "𝑼", "𝑾", "𝑾", "𝑿", "𝑿", "𝒀", "𝒁",
+    "𝑵", "𝑶", "𝑷", "𝑸", "𝑹", "𝑺", "𝑻", "𝑼", "𝑾", "𝑾", "𝑿", "𝒀", "𝒁",
     "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
 )
 
@@ -261,7 +258,7 @@ val unstyledStrikeThroughLayout = arrayOf(
     "̶n", "̶o", "̶p", "̶q", "̶r", "̶s", "̶t", "̶u", "̶v", "̶w", "̶x", "̶y", "̶z",
     "̶A", "̶B", "̶C", "̶D", "̶E", "̶F", "̶G", "̶H", "̶I", "̶J", "̶K", "̶L", "̶M",
     "̶N", "̶O", "̶P", "̶Q", "̶R", "̶S", "̶T", "̶U", "̶V", "̶W", "̶X", "̶Y", "̶Z",
-    "̶1", "̶2", "̶3", "̶4", "̶5", "̶6", "̶7", "̶8",  "̶9", "̶0"
+    "̶1", "̶2", "̶3", "̶4", "̶5", "̶6", "̶7", "̶8", "̶9", "̶0"
 )
 
 val doubleUnderlineLayout = arrayOf(
@@ -297,7 +294,7 @@ val sadFaceLayout = arrayOf(
 )
 
 val ethiopicLayout = arrayOf(
-    "ል", "ጌ", "ር", "ዕ", "ቿ", "ቻ", "ኗ", "ዘ", "ጎ", "ጕ", "ᛕ",  "ረ", "ጠ",
+    "ል", "ጌ", "ር", "ዕ", "ቿ", "ቻ", "ኗ", "ዘ", "ጎ", "ጕ", "ᛕ", "ረ", "ጠ",
     "ክ", "ዐ", "የ", "ዒ", "ዪ", "ነ", "ፕ", "ሁ", "ሀ", "ሠ", "ሸ", "ሃ", "ጊ",
     "ል", "ጌ", "ር", "ዕ", "ቿ", "ቻ", "ኗ", "ዘ", "ጎ", "ጕ", "ᛕ", "ረ", "ጠ",
     "ክ", "ዐ", "የ", "ዒ", "ዪ", "ነ", "ፕ", "ሁ", "ሀ", "ሠ", "ሸ", "ሃ", "ጊ",
@@ -488,6 +485,8 @@ val layoutMap = mapOf<String, Array<String>>(
     "s̾t̾i̾n̾k̾y̾" to stinkyLayout,
 )
 
+val lockedFonts = setOf<String>("ᑕOᗰIᑕ", "𝔊𝔬𝔱𝔥𝔦𝔠", "𝕲𝖔𝖙𝖍𝖎𝖈 𝕭𝖔𝖑𝖉", "𝒮𝒸𝓇𝒾𝓅𝓉", "𝓢𝓬𝓻𝓲𝓹𝓽 𝓑𝓸𝓵𝓭", "๔เgเtคl  tħคเ")
+
 val allFontString: Array<String> = layoutMap.values
     .flatMap { it.asList() }
     .distinct()
@@ -495,3 +494,94 @@ val allFontString: Array<String> = layoutMap.values
     .toTypedArray()
 
 val fontNames = layoutMap.keys.toTypedArray()
+
+val suggestibleFonts = mutableSetOf<String>().apply{
+    val allCharacters = mutableSetOf<String>()
+    out@
+    for ((key, layout) in layoutMap) {
+        if(layout.size>62) throw Exception("$key has size ${layout.size}")
+
+        val visitedSet = mutableSetOf<String>()
+        for(char in layout){
+            // Don't allow duplicate characters
+            if(allCharacters.contains(char) || visitedSet.contains(char)) continue@out
+            visitedSet.add(char)
+        }
+
+        for (i in 0 until layout.size) {
+            allCharacters.add(layout[i])
+        }
+
+        this.add(key)
+    }
+}
+
+val fancyToAsciiMap = mutableMapOf<String, String>().apply {
+    for ((key, layout) in layoutMap) {
+        if(suggestibleFonts.contains(key)){
+            for (i in 0 until layout.size) {
+                this[layout[i]] = normalLayout[i]
+            }
+        }
+    }
+} as Map<String, String>
+
+private val fancyToLayoutMap = mutableMapOf<String, Array<String>>().apply {
+    for ((key, layout) in layoutMap) {
+        if(suggestibleFonts.contains(key)){
+            for (i in 0 until layout.size) {
+                this[layout[i]] = layout
+            }
+        }
+    }
+} as Map<String, Array<String>>
+
+private val asciiToIndexMap = mutableMapOf<String, Int>().apply {
+    for (i in 0 until normalLayout.size) {
+        this[normalLayout[i]] = i
+    }
+} as Map<String, Int>
+
+
+fun splitToFancyCharacters(str: String): List<String> {
+    val arr = mutableListOf<String>()
+    var i = 0
+
+    out@
+    while (i < str.length) {
+        var count = min(4, str.length - i)
+        for (j in count downTo 1) {
+            val candidate = str.substring(i, i + j)
+            if (fancyToAsciiMap.containsKey(candidate)) {
+                arr.add(candidate)
+                i += j
+                continue@out
+            }
+        }
+
+        arr.add(str.substring(i, i + 1))
+        i++
+    }
+
+    return arr
+}
+
+// Converts the given string in any font to ascii
+fun fancyToAscii(prefix: String): String {
+    return splitToFancyCharacters(prefix).joinToString("") { fancyToAsciiMap[it]!! }
+}
+
+fun suggestionToFancy(prefix: String, suggested: String): String {
+    val splits = splitToFancyCharacters(prefix)
+    if (splits.isEmpty()) return ""
+    val layout = fancyToLayoutMap[splits.last()] ?: normalLayout
+    Log.d("suggestionToFancy", "last: ${splits.last()} Layout ${layout.joinToString()}")
+    var suggestionToShow = splits.joinToString("")
+
+    for (char in suggested.substring(splits.size)) {
+        val index = asciiToIndexMap[char.toString()] ?: continue
+        suggestionToShow += layout[index]
+    }
+
+    return suggestionToShow
+}

@@ -17,10 +17,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.google.android.gms.ads.MobileAds
+import fancyboard.fonts.keyboard.MyApplication
 import fancyboard.fonts.keyboard.ui.component.CreateTheme
 import fancyboard.fonts.keyboard.ui.component.TestKeyboard
 import fancyboard.fonts.keyboard.ui.component.ThemeView
+import fancyboard.fonts.keyboard.ui.component.isKeyboardEnabled
 import fancyboard.fonts.keyboard.ui.theme.FancyboardFontsKeyboardTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -37,6 +43,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        if (isKeyboardEnabled(this)) {
+            CoroutineScope(Dispatchers.IO).launch {
+                MobileAds.initialize(this@MainActivity) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        (application as? MyApplication)?.loadAd {
+                            (application as? MyApplication)?.showAdIfAvailable(this@MainActivity) {}
+                        }
+                    }
+                }
+            }
+        }
+
         enableEdgeToEdge()
         setContent {
             val navHostController = rememberNavController()
@@ -58,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                 CreateTheme(navHostController, data.themeId)
                             }
 
-                            composable<TestKeyboardScreen>{
+                            composable<TestKeyboardScreen> {
                                 TestKeyboard(navHostController)
                             }
                         }
