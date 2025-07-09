@@ -18,10 +18,10 @@ class MyApplication : Application() {
     private var appOpenAd: AppOpenAd? = null
     override fun onCreate() {
         super.onCreate()
-        Log.d("MyApplication", "Application created!!")
+        Log.d("MyApplication", "Application created is debug: ${isDebug()}")
     }
 
-    fun loadAd(onComplete: () -> Unit) {
+    fun loadAd(onComplete: () -> Unit, onFailed:()-> Unit) {
         if (appOpenAd != null) {
             onComplete()
             return
@@ -29,6 +29,7 @@ class MyApplication : Application() {
 
         val adId = if (isDebug()) "ca-app-pub-3940256099942544/9257395921"
         else "ca-app-pub-1558100192494221/7026868309"
+        Log.d("MyApplication", "Appopen ad id $adId")
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
             this, adId, request,
@@ -40,7 +41,7 @@ class MyApplication : Application() {
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    Log.d("MyApplication", loadAdError.message)
+                    Log.d("MyApplication", "Failed to load app open ad: " + loadAdError.message)
                 }
             })
     }

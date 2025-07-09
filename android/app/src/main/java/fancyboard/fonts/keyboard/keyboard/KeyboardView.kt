@@ -220,8 +220,6 @@ open class KeyboardView(
                 postDelayed({
                     removeView(it)
                 }, 5000)
-            }, "Cancel", {
-                removeView(it)
             })
         } else {
             showRateUsOverlay()
@@ -299,6 +297,10 @@ open class KeyboardView(
         messageView.text = message
         positiveView.text = positive
         cancelView.text = cancel
+
+        if(onNegative==null){
+            cancelView.visibility = GONE
+        }
 
         positiveView.setOnClickListener {
             onPositive(overlay)
