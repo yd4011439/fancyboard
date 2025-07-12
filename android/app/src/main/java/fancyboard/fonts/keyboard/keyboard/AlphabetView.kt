@@ -61,8 +61,12 @@ class AlphabetView(
         val layout = getLayout(this.layout, shiftState != ShiftState.NONE, this.isSymbol)
         for (key in keys) {
             val id = key.id
-            val text = layout[id] ?: continue
-            if (key is Button) {
+            val text = layout[id]
+
+            if(text==null){
+                if(key is Button) key.visibility = GONE
+            }else if (key is Button) {
+                key.visibility = VISIBLE
                 if(this.layout=="B⃠a⃠n⃠n⃠e⃠d⃠"){
                     key.textSize = 18f
                 }else{

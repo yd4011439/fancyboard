@@ -151,7 +151,7 @@ open class KeyboardView(
                 lastBackgroundImage = theme.backgroundImage
             }
         } else if (theme.backgroundDrawable != null) {
-            backgroundImage.setBackgroundResource(theme.backgroundDrawable)
+            Glide.with(backgroundImage).load(theme.backgroundDrawable).into(backgroundImage)
         } else {
             backgroundImage.alpha = 0f
         }
@@ -228,18 +228,23 @@ open class KeyboardView(
 
     fun showRateUsOverlay() {
         var lastRateUsAt = preferences.getLong("lastRateUsAt", -1)
+        if (lastRateUsAt == -2L) return
+
         if (lastRateUsAt == -1L) {
             preferences.edit { putLong("lastRateUsAt", System.currentTimeMillis()) }
             return
         }
 
-        // Ask at least once two days
-        if (System.currentTimeMillis() - lastRateUsAt > 2 * 86_400 * 1000) {
+        // Ask at least once three days
+        if (System.currentTimeMillis() - lastRateUsAt > 3 * 86_400 * 1000) {
             preferences.edit { putLong("lastRateUsAt", System.currentTimeMillis()) }
             showOverlay("Please provide feedback by rating us.", "Rate Us", {
                 rateApp(context)
             }, "Cancel", {
                 hideOverlay(it)
+            }, {
+                hideOverlay(it)
+                preferences.edit { putLong("lastRateUsAt", -2L) }
             })
         }
     }
@@ -275,30 +280,36 @@ open class KeyboardView(
         positive: String,
         onPositive: (v: View) -> Unit,
         cancel: String = "Cancel",
-        onNegative: ((v: View) -> Unit)? = null
+        onNegative: ((v: View) -> Unit)? = null,
+        onDoNotShow: ((v: View) -> Unit)? = null,
     ) {
         val overlay = inflate(context, R.layout.keyboard_overlay, null)
         overlay.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, context.dpToPx(308))
         overlay.y = context.dpToPx(adContainer.adHeightDp + 308).toFloat()
         val finalY = context.dpToPx(adContainer.adHeightDp).toFloat()
 
-        overlay.setOnClickListener {  }
+        overlay.setOnClickListener { }
 
         overlay.animate().y(finalY).setDuration(100).start()
 
         val messageView = overlay.findViewById<TextView>(R.id.message)
         val positiveView = overlay.findViewById<Button>(R.id.positive_action)
         val cancelView = overlay.findViewById<Button>(R.id.cancel_action)
+        val doNotShowAgain = overlay.findViewById<Button>(R.id.extra_action)
 
         if (onNegative == null) {
             cancelView.visibility = GONE
+        }
+
+        if (onDoNotShow == null) {
+            doNotShowAgain.visibility = GONE
         }
 
         messageView.text = message
         positiveView.text = positive
         cancelView.text = cancel
 
-        if(onNegative==null){
+        if (onNegative == null) {
             cancelView.visibility = GONE
         }
 
@@ -308,6 +319,10 @@ open class KeyboardView(
 
         cancelView.setOnClickListener {
             onNegative?.invoke(overlay)
+        }
+
+        doNotShowAgain.setOnClickListener {
+            onDoNotShow?.invoke(overlay)
         }
         addView(overlay)
     }

@@ -77,6 +77,10 @@ class MainActivity : ComponentActivity() {
         MobileAds.initialize(this@MainActivity) {}
 
         enableEdgeToEdge()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(10000)
+            askReview(this@MainActivity)
+        }
         setContent {
             val navHostController = rememberNavController()
             var showLoadingAd by remember { mutableStateOf(false) }

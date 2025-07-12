@@ -23,6 +23,7 @@
         <Button
             android:id="@+id/positive_action"
             style="@style/KeyStyle"
+            android:paddingHorizontal="16dp"
             android:backgroundTint="#38bdf8"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -45,6 +46,23 @@
             android:elevation="0dp"
             android:textColor="#494949"
             android:text="Cancel"
+            android:textAllCaps="false" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"/>
+
+        <Button
+            android:id="@+id/extra_action"
+            style="@style/KeyStyle"
+            android:paddingHorizontal="8dp"
+            android:layout_width="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:textSize="14sp"
+            android:layout_height="36dp"
+            android:elevation="0dp"
+            android:textColor="#fff"
+            android:text="Don't show Again"
             android:textAllCaps="false" />
     </LinearLayout>
 </LinearLayout>

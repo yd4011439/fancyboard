@@ -82,7 +82,7 @@
                 android:text="p" />
 
             <Button
-                android:id="@+id/row_2_e"
+                android:id="@+id/row_1_e"
                 style="@style/KeyStyle"
                 android:text="p"
                 android:visibility="gone" />
@@ -146,8 +146,15 @@
                 style="@style/KeyStyle"
                 android:text="l" />
 
+
+            <Button
+                android:id="@+id/row_2_e"
+                style="@style/KeyStyle"
+                android:text=")"
+                android:visibility="visible" />
+
             <View
-                android:id="@+id/row_3_gap_e"
+                android:id="@+id/row_2_gap_e"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.5" />

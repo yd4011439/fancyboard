@@ -93,6 +93,7 @@ val symbolShifted = mapOf(
     R.id.key_j to "_",
     R.id.key_k to "+",
     R.id.key_l to "[",
+    R.id.row_2_e to "]",
 
     R.id.key_z to "¡",
     R.id.key_x to "<",
@@ -128,6 +129,7 @@ val symbolNormal = mapOf(
     R.id.key_j to "-",
     R.id.key_k to "=",
     R.id.key_l to "(",
+    R.id.row_2_e to ")",
 
     R.id.key_z to ",",
     R.id.key_x to "!",
